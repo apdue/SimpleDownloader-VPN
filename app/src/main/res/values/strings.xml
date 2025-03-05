@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">Video Downloader</string>
+    <string name="facebook_app_id">2542720795933100</string>
+    <string name="facebook_client_token">6d7d17ee349fd9b3f5d435799fa21768</string>
+
+    <string name="hOne">🚀 Fast &amp; Reliable Downloads</string>
+    <string name="bOne">Tired of slow downloads? Our advanced technology ensures you get your favorite videos at blazing-fast speeds without any delays. Whether you\'re saving short clips or full-length movies, our downloader optimizes performance to give you the best experience. Say goodbye to buffering and hello to seamless downloading!</string>
+
+    <string name="hTwo">🎥 Download in Multiple Resolutions</string>
+    <string name="bTwo">Not every situation calls for HD. With our app, you can choose from multiple resolutions, from crisp 1080p for stunning clarity to lower resolutions that help save storage and data. Whether you\'re watching on a big screen or a mobile device, download videos in the quality that suits you best.</string>
+
+    <string name="hThree">🔄 Background &amp; Resume Support</string>
+    <string name="bThree">Don’t let interruptions ruin your downloads! Our app supports background downloading, so you can continue using your phone while files are being saved. If your internet disconnects or the app closes unexpectedly, you can resume downloads right where they left off—no need to start over.</string>
+
+    <string name="hFour">🔊 Audio-Only Download Option</string>
+    <string name="bFour">Love a song but don’t need the video? Save space by downloading just the audio in high-quality formats. Whether it\'s your favorite music, podcasts, or interviews, you can enjoy crystal-clear sound without wasting extra storage on video files you don’t need.</string>
+
+    <string name="hFive">🔐 Secure &amp; Ad-Free Experience</string>
+    <string name="bFive">Your privacy and experience matter. Unlike other apps cluttered with pop-ups and intrusive ads, we offer a clean, ad-free environment for hassle-free downloads. Plus, your data stays safe with us—no unnecessary permissions, no tracking, just smooth and secure downloading.</string>
+
+</resources>
