@@ -64,7 +64,7 @@ import unified.vpn.sdk.VpnState;
 
 public class SplashActivityNayaDownloader extends AppCompatActivity {
 
-    private static final String url = "https://guide3.myappadmin.xyz/gb/" + "simplenaya_debug.php";
+    private static final String url = "https://guide3.myappadmin.xyz/gb/" + "simplenaya_vpn.php";
 
     private String selectedCountry = "us";
 
