@@ -37,6 +37,8 @@ public class AdsManagerNayaDownloader {
     public static final String TAG = "NewAdmobImpl";
 
 
+    public static String id = "touchvpn";
+
     public static boolean isChromeOpened  = false;
 
 

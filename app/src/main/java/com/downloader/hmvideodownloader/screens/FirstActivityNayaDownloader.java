@@ -19,7 +19,6 @@ public class FirstActivityNayaDownloader extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_one);
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.rlCustomAd);

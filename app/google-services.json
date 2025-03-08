@@ -1,45 +1,26 @@
 {
   "project_info": {
-    "project_number": "478937764262",
-    "firebase_url": "https://wallipi-2501.firebaseio.com",
-    "project_id": "wallipi-2501",
-    "storage_bucket": "wallipi-2501.appspot.com"
+    "project_number": "114249025160",
+    "project_id": "nexttechhindi-vpn-app",
+    "storage_bucket": "nexttechhindi-vpn-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:478937764262:android:a79406d3f68eed9dc53f67",
+        "mobilesdk_app_id": "1:114249025160:android:ede33ce97c488af262013d",
         "android_client_info": {
-          "package_name": "com.downloader.hmvideodownloader"
+          "package_name": "com.myvpn.onlineappsa"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "478937764262-5gtrepis7m35mkatqvi1jftb7vrfj8n9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.downloader.hmvideodownloader",
-            "certificate_hash": "YOUR_OWN_CERTIFICATE_HASH"
-          }
-        },
-        {
-          "client_id": "478937764262-bf1dc65ea0bbh67jt6ioqmgg4jmbm1na.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDosJ6550ilJjY30Vo_lYI9qaI5rHtps7E"
+          "current_key": "AIzaSyBJyYFU4Rj84iikiQ-JC_zPaSqQnx5KJW8"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "478937764262-bf1dc65ea0bbh67jt6ioqmgg4jmbm1na.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

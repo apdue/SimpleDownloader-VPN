@@ -1,6 +1,7 @@
 package com.downloader.hmvideodownloader;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,29 +43,53 @@ public class VideoPlayerActivityNayaDownloader extends AppCompatActivity {
         });
 
         VideoView videoView = (VideoView) findViewById(R.id.videoView);
+        boolean isOnline = getIntent().getBooleanExtra("isOnline", false);
+        if (isOnline){
 
-        Integer video = getIntent().getIntExtra("video", 0);
+            String video = getIntent().getStringExtra("video");
+            findViewById(R.id.downloadBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String fileName = "Video_" + System.currentTimeMillis() + ".mp4";
 
-        findViewById(R.id.downloadBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (PermissionsNayaDownloader.isAllStoragePermissionsGranted(VideoPlayerActivityNayaDownloader.this)) {
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(video));
+                    request.setTitle(fileName);
+                    request.setDescription(fileName);
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+                    DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    downloadManager.enqueue(request);
+                }
+            });
+
+            videoView.setVideoURI(Uri.parse(video));
+
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+
+            videoView.start();
+        } else {
+            Integer video = getIntent().getIntExtra("video", 0);
+            findViewById(R.id.downloadBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     copyRawVideoToDownloads(VideoPlayerActivityNayaDownloader.this, video, "Video_" + System.currentTimeMillis() + ".mp4");
-//                } else {
-//                    PermissionsNayaDownloader.requestAllStoragePermissions(VideoPlayerActivityNayaDownloader.this, 101);
-//                }
-            }
-        });
+                }
+            });
 
-        String path = "android.resource://" + getPackageName() + "/" + video;
+            String path = "android.resource://" + getPackageName() + "/" + video;
 
-        videoView.setVideoURI(Uri.parse(path));
+            videoView.setVideoURI(Uri.parse(path));
 
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
 
-        videoView.start();
+            videoView.start();
+        }
+
     }
 
     public void copyRawVideoToDownloads(Context context, int rawId, String fileName) {

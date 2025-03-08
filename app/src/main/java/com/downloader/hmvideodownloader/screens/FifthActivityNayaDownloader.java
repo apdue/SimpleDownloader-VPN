@@ -11,13 +11,13 @@ import com.downloader.hmvideodownloader.MainActivityNayaDownloader;
 import com.downloader.hmvideodownloader.R;
 import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
 import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.downloader.hmvideodownloader.vpn.screen.MainActivity;
 
 public class FifthActivityNayaDownloader extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_five);
 
@@ -27,6 +27,17 @@ public class FifthActivityNayaDownloader extends AppCompatActivity {
 
         AdsManagerNayaDownloader.showAndLoadNativeAd(this, findViewById(R.id.nativeLayoutSmaller), 0);
 
+        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.enable_vpn_screen).contains("true")){
+            findViewById(R.id.btnVPN).setVisibility(View.VISIBLE);
+        }
+
+        findViewById(R.id.btnVPN).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(FifthActivityNayaDownloader.this, MainActivity.class));
+            }
+        });
+
     }
 
     public void CLICK(View view) {
@@ -35,9 +46,7 @@ public class FifthActivityNayaDownloader extends AppCompatActivity {
 
     private void startActivity() {
         Intent intent;
-
         intent = new Intent(this, MainActivityNayaDownloader.class);
-
         AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
 
             @Override

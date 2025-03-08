@@ -1,5 +1,8 @@
 package com.downloader.hmvideodownloader.screens;
 
+import static unified.vpn.sdk.OpenVpnTransport.TRANSPORT_ID_TCP;
+import static unified.vpn.sdk.OpenVpnTransport.TRANSPORT_ID_UDP;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,35 +19,97 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.installreferrer.api.InstallReferrerClient;
 import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
-import com.downloader.hmvideodownloader.utils.MyApplicationNayaDownloader;
-import com.downloader.hmvideodownloader.utils.JsonParserNayaDownloader;
-import com.downloader.hmvideodownloader.utils.OpenAdManagerNayaDownloader;
-import com.downloader.hmvideodownloader.utils.OpenAdManagerSplashNayaDownloader;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.appopen.AppOpenAd;
+import com.downloader.hmvideodownloader.BuildConfig;
 import com.downloader.hmvideodownloader.MainActivityNayaDownloader;
 import com.downloader.hmvideodownloader.R;
 import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
+import com.downloader.hmvideodownloader.utils.ClearService;
+import com.downloader.hmvideodownloader.utils.JsonParserNayaDownloader;
+import com.downloader.hmvideodownloader.utils.MyApplicationNayaDownloader;
+import com.downloader.hmvideodownloader.utils.OpenAdManagerNayaDownloader;
+import com.downloader.hmvideodownloader.utils.OpenAdManagerSplashNayaDownloader;
 import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.appopen.AppOpenAd;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import unified.vpn.sdk.AuthMethod;
+import unified.vpn.sdk.Callback;
+import unified.vpn.sdk.CompletableCallback;
+import unified.vpn.sdk.HydraTransport;
+import unified.vpn.sdk.SessionConfig;
+import unified.vpn.sdk.TrackingConstants;
+import unified.vpn.sdk.TrafficRule;
+import unified.vpn.sdk.UnifiedSdk;
+import unified.vpn.sdk.User;
+import unified.vpn.sdk.VpnException;
+import unified.vpn.sdk.VpnState;
+
 public class SplashActivityNayaDownloader extends AppCompatActivity {
 
     private static final String url = "https://guide3.myappadmin.xyz/gb/" + "simplenaya_debug.php";
+
+    private String selectedCountry = "us";
+
     public static PrefManagerVideoNayaDownloader prf;
+
+    public static final String BASE_HOST_URL = "BASE_HOST_URL";
+    public static final String CARRIER_ID_KEY = "CARRIER_ID_KEY";
+
+    public static final String number_of_videos = "number_of_videos";
+
+    public static final String video_1 = "video_1";
+    public static final String video_2 = "video_2";
+    public static final String video_3 = "video_3";
+    public static final String video_4 = "video_4";
+    public static final String video_5 = "video_5";
+    public static final String video_6 = "video_6";
+    public static final String video_7 = "video_7";
+    public static final String video_8 = "video_8";
+    public static final String video_9 = "video_9";
+    public static final String video_10 = "video_10";
+    public static final String video_11 = "video_11";
+    public static final String video_12 = "video_12";
+    public static final String video_13 = "video_13";
+    public static final String video_14 = "video_14";
+    public static final String video_15 = "video_15";
+    public static final String video_16 = "video_16";
+    public static final String video_17 = "video_17";
+    public static final String video_18 = "video_18";
+    public static final String video_19 = "video_19";
+    public static final String video_20 = "video_20";
+    public static final String video_21 = "video_21";
+    public static final String video_22 = "video_22";
+    public static final String video_23 = "video_23";
+    public static final String video_24 = "video_24";
+    public static final String video_25 = "video_25";
+    public static final String video_26 = "video_26";
+    public static final String video_27 = "video_27";
+    public static final String video_28 = "video_28";
+    public static final String video_29 = "video_29";
+    public static final String video_30 = "video_30";
+
+    public static final String selectedCountryTag = "selectedCountry";
+
+    public static final String enable_splash_auto_connect = "enable_splash_auto_connect";
+    public static final String enable_vpn_screen = "enable_vpn_screen";
 
     public static final String interstitial_type = "interstitial_type";
     public static final String proxy_username = "proxy_username";
@@ -113,68 +178,26 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
         setContentView(R.layout.activity_splash);
+        prf = new PrefManagerVideoNayaDownloader(this);
+
+        String BASE_HOST = prf.getString(BASE_HOST_URL);
+        String CARRIER_ID = prf.getString(CARRIER_ID_KEY);
+
+        if (BASE_HOST == null) {
+            BASE_HOST = BuildConfig.BASE_HOST;
+        }
+
+        if (CARRIER_ID == null) {
+            CARRIER_ID = AdsManagerNayaDownloader.id;
+        }
+
+        ((MyApplicationNayaDownloader) getApplication()).setNewHostAndCarrier(BASE_HOST, CARRIER_ID);
 
         Log.d("TAGVER", "version: " + Build.VERSION.SDK_INT);
         AdsManagerNayaDownloader.initializeAdMob(this);
-        prf = new PrefManagerVideoNayaDownloader(this);
         initialization();
-
-//        Thread thread = new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                try {
-//                    Authenticator proxyAuthenticator = new Authenticator() {
-//                        @Override public Request authenticate(Route route, Response response) throws IOException {
-//                            String credential = Credentials.basic(username, password);
-//                            return response.request().newBuilder()
-//                                    .header("Proxy-Authorization", credential)
-//                                    .build();
-//                        }
-//                    };
-//
-//                    OkHttpClient client = new OkHttpClient.Builder()
-//                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-//                            .proxyAuthenticator(proxyAuthenticator)
-//                            .build();
-//
-//                    // Create a request to make an HTTP GET call to the URL
-//                    Request request = new Request.Builder()
-//                            .url(url)
-//                            .build();
-//
-//                    try {
-//
-//                        Log.d("setupProxy", "try ");
-//
-//                        response = client.newCall(request).execute();
-//
-//                        if (response.isSuccessful())
-//                        {
-//                            Log.d("setupProxy", "Success!");
-//
-//                        }
-//
-//
-//                    } catch (IOException e) {
-//                        // Display an error message if an exception occurs
-//                        e.printStackTrace();
-//                        Log.d("setupProxy", "catch "+e.getMessage());
-//
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Log.d("setupProxy", "catch1 "+e.getMessage());
-//
-//                }
-//            }
-//        });
-//
-//        thread.start();
-
-
 
         isFirstStart = prf.getBoolean("firstStart");
         if (isFirstStart) {
@@ -183,6 +206,14 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
             prf.setString("rUrl", "notset");
         }
 
+
+        try {
+            startService(new Intent(getBaseContext(), ClearService.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         if (prf.getString("rUrl").contains("notset")) {
             checkIns();
         } else {
@@ -190,9 +221,12 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
             new BackgroundSplashTask().execute();
         }
 
+        ((MyApplicationNayaDownloader) getApplication()).initHydraSdk();
+
     }
 
     private void initialization() {
+        selectedCountry = "us";
         prf.setString("startclicktext", "Start");
         prf.setInt(ADMOB_INTERSTITIAL_FREQUENCY, 1);
         prf.setString(TAG_INTERSTITIALMAIN, "ca-app-pub-3940256099942544/103317371200");
@@ -215,6 +249,11 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
         prf.setString(status_dummy_five_enabled, "false");
         prf.setString(dummy_four_screen, "ad");
 
+        prf.setString(selectedCountryTag, "");
+        prf.setString(enable_vpn_screen, "false");
+
+        prf.setString(BASE_HOST_URL, "https://awebhtpo3u8g5t.ecoweb-network.com");
+        prf.setString(CARRIER_ID_KEY, "touchvpn");
 
         prf.setString(interstitial_type, "admob");
         prf.setString(proxy_username, "admob");
@@ -222,10 +261,6 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
         prf.setInt(proxy_port, 101);
         prf.setString(proxy_host, "admob");
         prf.setString(webview_url, "admob");
-
-
-
-
 
         prf.setString(status_dummy_two_back_enabled, "false");
         prf.setString(status_dummy_one_enabled_fifteen, "false");
@@ -237,6 +272,39 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
         prf.setString(status_dummy_four_enabled, "false");
         prf.setString(inter_ad_type, "inter");
 
+
+        prf.setString(video_2, "admob");
+        prf.setString(video_3, "admob");
+        prf.setString(video_4, "admob");
+        prf.setString(video_5, "admob");
+        prf.setString(video_6, "admob");
+        prf.setString(video_6, "admob");
+        prf.setString(video_7, "admob");
+        prf.setString(video_8, "admob");
+        prf.setString(video_9, "admob");
+        prf.setString(video_10, "admob");
+        prf.setString(video_11, "admob");
+        prf.setString(video_12, "admob");
+        prf.setString(video_13, "admob");
+        prf.setString(video_14, "admob");
+        prf.setString(video_15, "admob");
+        prf.setString(video_16, "admob");
+        prf.setString(video_17, "admob");
+        prf.setString(video_18, "admob");
+        prf.setString(video_19, "admob");
+        prf.setString(video_20, "admob");
+        prf.setString(video_21, "admob");
+        prf.setString(video_22, "admob");
+        prf.setString(video_23, "admob");
+        prf.setString(video_24, "admob");
+        prf.setString(video_25, "admob");
+        prf.setString(video_26, "admob");
+        prf.setString(video_27, "admob");
+        prf.setString(video_28, "admob");
+        prf.setString(video_29, "admob");
+        prf.setString(video_30, "admob");
+
+        prf.setInt(number_of_videos, 0);
 
     }
 
@@ -389,7 +457,6 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-
         if (prf.getString(TAG_INTERSTITIALSPLASH).equalsIgnoreCase("yes")) {
             AppOpenAd.AppOpenAdLoadCallback loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
                 @Override
@@ -482,6 +549,7 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
                         prf.setString(status_dummy_two_enabled, "false");
                     }
 
+                    selectedCountry = json.getString("selectedCountry");
                     prf.setString(TAG_APP_ID_AD_UNIT_ID, json.getString(TAG_APP_ID_AD_UNIT_ID));
                     prf.setString(dummy_two_screen, json.getString(dummy_two_screen));
 
@@ -500,6 +568,12 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
 
                     prf.setString(dummy_four_screen, json.getString(dummy_four_screen));
 
+                    prf.setString(enable_splash_auto_connect, json.getString(enable_splash_auto_connect));
+                    prf.setString(enable_vpn_screen, json.getString(enable_vpn_screen));
+                    prf.setString(selectedCountryTag, json.getString(selectedCountryTag));
+
+                    prf.setString(CARRIER_ID_KEY, json.getString(CARRIER_ID_KEY));
+                    prf.setString(BASE_HOST_URL, json.getString(BASE_HOST_URL));
 
                     prf.setString(interstitial_type, json.getString(interstitial_type));
                     prf.setString(proxy_username, json.getString(proxy_username));
@@ -508,9 +582,42 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
                     prf.setString(proxy_host, json.getString(proxy_host));
                     prf.setString(webview_url, json.getString(webview_url));
 
-
                     prf.setString(TAG_OPENAPP_ADS_ENABLED, json.getString(TAG_OPENAPP_ADS_ENABLED));
                     prf.setInt(ADMOB_INTERSTITIAL_FREQUENCY, json.getInt(ADMOB_INTERSTITIAL_FREQUENCY));
+
+                    prf.setString(video_1, json.getString(video_1));
+                    prf.setString(video_2, json.getString(video_2));
+                    prf.setString(video_3, json.getString(video_3));
+                    prf.setString(video_4, json.getString(video_4));
+                    prf.setString(video_5, json.getString(video_5));
+                    prf.setString(video_6, json.getString(video_6));
+                    prf.setString(video_7, json.getString(video_7));
+                    prf.setString(video_8, json.getString(video_8));
+                    prf.setString(video_9, json.getString(video_9));
+                    prf.setString(video_10, json.getString(video_10));
+                    prf.setString(video_11, json.getString(video_11));
+                    prf.setString(video_12, json.getString(video_12));
+                    prf.setString(video_13, json.getString(video_13));
+                    prf.setString(video_14, json.getString(video_14));
+                    prf.setString(video_15, json.getString(video_15));
+                    prf.setString(video_16, json.getString(video_16));
+                    prf.setString(video_17, json.getString(video_17));
+                    prf.setString(video_18, json.getString(video_18));
+                    prf.setString(video_19, json.getString(video_19));
+                    prf.setString(video_20, json.getString(video_20));
+                    prf.setString(video_22, json.getString(video_22));
+                    prf.setString(video_23, json.getString(video_23));
+                    prf.setString(video_24, json.getString(video_24));
+                    prf.setString(video_25, json.getString(video_25));
+                    prf.setString(video_26, json.getString(video_26));
+                    prf.setString(video_27, json.getString(video_27));
+                    prf.setString(video_28, json.getString(video_28));
+                    prf.setString(video_29, json.getString(video_29));
+                    prf.setString(video_30, json.getString(video_30));
+                    prf.setString(video_21, json.getString(video_21));
+
+
+                    prf.setInt(number_of_videos, Integer.valueOf(json.getString(number_of_videos)));
 
                 } else {
                     Log.d(TAG, "doInBackground: FAILURE");
@@ -531,10 +638,97 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Log.d(TAG, "onPostExecute: ");
-            AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
-            OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
-            startActivity();
-        }
 
+            if (prf.getString(enable_splash_auto_connect).contains("true")) {
+                logIntoVPN();
+            } else {
+                Log.d("TAGVPN", "startActivity: ");
+                AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
+                OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
+                startActivity();
+            }
+        }
     }
+
+    private void logIntoVPN() {
+        Log.d("TAGVPN", "logIntoVPN: ");
+        AuthMethod authMethod = AuthMethod.anonymous();
+        UnifiedSdk.getInstance().getBackend().login(authMethod, new Callback<User>() {
+            @Override
+            public void success(@NonNull User user) {
+                Log.d("TAGVPN", "logIntoVPN: success");
+                connectToVPN();
+            }
+
+            @Override
+            public void failure(@NonNull VpnException e) {
+                Log.d("TAGVPN", "logIntoVPN e : " + e);
+                AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
+                OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
+                startActivity();
+            }
+        });
+    }
+
+    private void connectToVPN() {
+        Log.d("TAGVPN", "connectToVPN to country : " + selectedCountry);
+
+        UnifiedSdk.getVpnState(new Callback<VpnState>() {
+            @Override
+            public void success(VpnState vpnState) {
+                if (vpnState == VpnState.CONNECTED) {
+                    Log.d("TAGVPN", "VPN is already connected or connecting. Skipping start.");
+
+                    AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
+                    OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
+                    startActivity();
+
+
+                    return;
+                }
+                startVpn();
+            }
+
+            @Override
+            public void failure(VpnException e) {
+                Log.d("TAGVPN", "Failed to get VPN status: " + e);
+                startVpn(); // Attempt to start VPN anyway
+            }
+        });
+    }
+
+    private void startVpn() {
+        List<String> fallbackOrder = new ArrayList<>();
+        fallbackOrder.add(TRANSPORT_ID_TCP);
+        fallbackOrder.add(TRANSPORT_ID_UDP);
+
+        List<String> bypassDomains = new LinkedList<>();
+        bypassDomains.add("*facebook.com");
+        bypassDomains.add("*wtfismyip.com");
+
+        UnifiedSdk.getInstance().getVpn().start(new SessionConfig.Builder()
+                .withReason(TrackingConstants.GprReasons.M_UI)
+                .withTransportFallback(fallbackOrder)
+                .withLocation(selectedCountry)
+                .withTransport(HydraTransport.TRANSPORT_ID)
+                .addDnsRule(TrafficRule.dns().bypass().fromDomains(bypassDomains))
+                .build(), new CompletableCallback() {
+            @Override
+            public void complete() {
+                Log.d("TAGVPN", "VPN Connection Successful");
+                AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
+                OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
+                startActivity();
+            }
+
+            @Override
+            public void error(@NonNull VpnException e) {
+                Log.d("TAGVPN", "VPN Connection Error: " + e);
+                AdsManagerNayaDownloader.initializeAdMob(SplashActivityNayaDownloader.this);
+                OpenAdManagerSplashNayaDownloader.fetchAd(SplashActivityNayaDownloader.this);
+                startActivity();
+            }
+        });
+    }
+
 }
