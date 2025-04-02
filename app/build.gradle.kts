@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.downloader.hmvideodownloader"
+        applicationId = "com.myowndo.onlineappvp"
         minSdk = 24
         targetSdk = 34
         versionCode = 3
