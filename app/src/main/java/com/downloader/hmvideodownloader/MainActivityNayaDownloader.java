@@ -13,12 +13,10 @@ import com.downloader.hmvideodownloader.screens.FourthActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.SecondActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.SplashActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.ThirdActivityNayaDownloader;
-import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
-import com.downloader.hmvideodownloader.utils.PermissionsNayaDownloader;
-import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.downloader.hmvideodownloader.utils.AdsManager;
+import com.downloader.hmvideodownloader.utils.PrefManagerVideo;
 import com.downloader.hmvideodownloader.utils.VideosAdapterNayaDownloader;
 import com.downloader.hmvideodownloader.utils.VideosAdapterOnline;
-import com.downloader.hmvideodownloader.vpn.screen.MainActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
@@ -34,13 +32,13 @@ public class MainActivityNayaDownloader extends AppCompatActivity {
     VideosAdapterOnline videosAdapterOnline;
     ArrayList<String> arrayListOnline;
     RecyclerView recyclerViewOnline;
-    PrefManagerVideoNayaDownloader pref;
+    PrefManagerVideo pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        pref = new PrefManagerVideoNayaDownloader(this);
+        pref = new PrefManagerVideo(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
 //        if (!PermissionsNayaDownloader.isAllStoragePermissionsGranted(this)) {
@@ -126,41 +124,41 @@ public class MainActivityNayaDownloader extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_five_back_enabled).contains("true")) {
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_five_back_enabled).contains("true")) {
             intent = new Intent(this, FifthActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_four_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_four_back_enabled).contains("true")) {
             intent = new Intent(this, FourthActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_three_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_three_back_enabled).contains("true")) {
             intent = new Intent(this, ThirdActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
             intent = new Intent(this, SecondActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
             intent = new Intent(this, FirstActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);

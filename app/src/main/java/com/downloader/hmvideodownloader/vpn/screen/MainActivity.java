@@ -6,7 +6,6 @@ import static unified.vpn.sdk.OpenVpnTransport.TRANSPORT_ID_TCP;
 import static unified.vpn.sdk.OpenVpnTransport.TRANSPORT_ID_UDP;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.downloader.hmvideodownloader.R;
 import com.downloader.hmvideodownloader.screens.FifthActivityNayaDownloader;
@@ -23,9 +21,9 @@ import com.downloader.hmvideodownloader.screens.FourthActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.SecondActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.SplashActivityNayaDownloader;
 import com.downloader.hmvideodownloader.screens.ThirdActivityNayaDownloader;
-import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
+import com.downloader.hmvideodownloader.utils.AdsManager;
 import com.downloader.hmvideodownloader.utils.MyApplicationNayaDownloader;
-import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.downloader.hmvideodownloader.utils.PrefManagerVideo;
 import com.downloader.hmvideodownloader.vpn.utils.BillConfig;
 import com.downloader.hmvideodownloader.vpn.utils.CountryData;
 import com.downloader.hmvideodownloader.vpn.utils.LoginDialog;
@@ -88,9 +86,9 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
 
     @Override
     public void vpnStateChanged(@NonNull VpnState vpnState) {
+        Log.d(TAG, "vpnStateChanged: "+vpnState.toString());
         updateUI();
     }
-
 
     @Override
     public void vpnError(@NonNull VpnException e) {
@@ -105,7 +103,7 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
 
     @Override
     protected void loginToVpn() {
-        Log.e(TAG, "loginToVpn: 1111");
+        Log.d(TAG, "loginToVpn: 1111");
         AuthMethod authMethod = AuthMethod.anonymous();
         UnifiedSdk.getInstance().getBackend().login(authMethod, new Callback<User>() {
             @Override
@@ -136,10 +134,13 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
         });
     }
 
-    @Override
-    protected void connectToVpn() {
+    @Override    protected void connectToVpn() {
 
-        Log.d("TAGLOCATION", "connectToVpn: "+selectedCountry);
+        if(selectedCountry.isBlank()){
+            selectedCountry = new PrefManagerVideo(MainActivity.this).getString(SplashActivityNayaDownloader.selectedCountryTag);
+        }
+
+        Log.d(TAG, "connectToVpn: "+selectedCountry);
 
         isLoggedIn(new Callback<Boolean>() {
             @Override
@@ -153,39 +154,105 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
                     List<String> bypassDomains = new LinkedList<>();
                     bypassDomains.add("*facebook.com");
                     bypassDomains.add("*wtfismyip.com");
-                    UnifiedSdk.getInstance().getVpn().start(new SessionConfig.Builder()
-                            .withReason(TrackingConstants.GprReasons.M_UI)
-                            .withTransportFallback(fallbackOrder)
-                            .withLocation(selectedCountry)
-//                            .withVirtualLocation(selectedCountry)
-                            .withTransport(HydraTransport.TRANSPORT_ID)
-//                            .addDnsRule(TrafficRule.Builder.bypass().fromDomains(bypassDomains))
-                            .addDnsRule(TrafficRule.dns().bypass().fromDomains(bypassDomains))
-                            .build(), new CompletableCallback() {
+
+
+                    Log.d(TAG, "connectToVpn: loggedIn");
+
+
+
+                    UnifiedSdk.getVpnState(new Callback<VpnState>() {
                         @Override
-                        public void complete() {
+                        public void success(@NonNull VpnState vpnState) {
+                            Log.d(TAG, "connectToVpn: getVpnState");
 
-                            hideConnectProgress();
-                            startUIUpdateTask();
+                            if(vpnState == VpnState.IDLE){
+                                Log.d(TAG, "connectToVpn: getVpnState IDLE");
 
+                                UnifiedSdk.getInstance().getVpn().start(new SessionConfig.Builder()
+                                        .withReason(TrackingConstants.GprReasons.M_UI)
+                                        .withTransportFallback(fallbackOrder)
+                                        .withLocation(selectedCountry)
+//                            .withVirtualLocation(selectedCountry)
+                                        .withTransport(HydraTransport.TRANSPORT_ID)
+//                            .addDnsRule(TrafficRule.Builder.bypass().fromDomains(bypassDomains))
+                                        .addDnsRule(TrafficRule.dns().bypass().fromDomains(bypassDomains))
+                                        .build(), new CompletableCallback() {
+                                    @Override
+                                    public void complete() {
+                                        hideConnectProgress();
+                                        startUIUpdateTask();
+                                        Log.d(TAG, "complete: ");
+                                    }
+
+                                    @Override
+                                    public void error(@NonNull VpnException e) {
+                                        Log.d(TAG, "error: "+e);
+
+                                        hideConnectProgress();
+                                        updateUI();
+                                        handleError(e);
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "connectToVpn: getVpnState STOP AND START");
+
+                                UnifiedSdk.getInstance().getVpn().stop(TrackingConstants.GprReasons.M_UI, new CompletableCallback() {
+                                    @Override
+                                    public void complete() {
+
+                                        UnifiedSdk.getInstance().getVpn().start(new SessionConfig.Builder()
+                                                .withReason(TrackingConstants.GprReasons.M_UI)
+                                                .withTransportFallback(fallbackOrder)
+                                                .withLocation(selectedCountry)
+//                            .withVirtualLocation(selectedCountry)
+                                                .withTransport(HydraTransport.TRANSPORT_ID)
+//                            .addDnsRule(TrafficRule.Builder.bypass().fromDomains(bypassDomains))
+                                                .addDnsRule(TrafficRule.dns().bypass().fromDomains(bypassDomains))
+                                                .build(), new CompletableCallback() {
+                                            @Override
+                                            public void complete() {
+                                                hideConnectProgress();
+                                                startUIUpdateTask();
+                                                Log.d(TAG, "complete: ");
+                                            }
+
+                                            @Override
+                                            public void error(@NonNull VpnException e) {
+                                                Log.d(TAG, "error: "+e);
+
+                                                hideConnectProgress();
+                                                updateUI();
+                                                handleError(e);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void error(@NonNull VpnException e) {
+                                        Log.d(TAG, "STOPPING ERR : "+e);
+                                    }
+                                });
+                            }
 
                         }
 
                         @Override
-                        public void error(@NonNull VpnException e) {
-                            hideConnectProgress();
-                            updateUI();
-                            handleError(e);
+                        public void failure(@NonNull VpnException e) {
+                            binding.countryFlag.setImageDrawable(getResources().getDrawable(R.drawable.ic_earth));
+                            binding.selectedServer.setText(R.string.select_country);
                         }
                     });
+
                 }
             }
 
             @Override
             public void failure(@NonNull VpnException e) {
+                Log.d(TAG, "failure: "+e);
             }
         });
     }
+
 
 
     @Override
@@ -232,11 +299,35 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 3000) {
             if (resultCode == RESULT_OK) {
+                Log.d(TAG, "onActivityResult: CALLED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<----------------------");
                 Gson gson = new Gson();
                 Bundle args = data.getBundleExtra(BillConfig.BUNDLE);
                 CountryData item = gson.fromJson(args.getString(COUNTRY_DATA), CountryData.class);
                 onRegionSelected(item);
                 connectToVpn();
+
+
+//                UnifiedSdk.getInstance().getVpn().stop(TrackingConstants.GprReasons.M_UI, new CompletableCallback() {
+//                    @Override
+//                    public void complete() {
+//                        Gson gson = new Gson();
+//                        Bundle args = data.getBundleExtra(BillConfig.BUNDLE);
+//                        CountryData item = gson.fromJson(args.getString(COUNTRY_DATA), CountryData.class);
+//                        onRegionSelected(item);
+//                        connectToVpn();
+//                    }
+//
+//                    @Override
+//                    public void error(@NonNull VpnException e) {
+//                        Gson gson = new Gson();
+//                        Bundle args = data.getBundleExtra(BillConfig.BUNDLE);
+//                        CountryData item = gson.fromJson(args.getString(COUNTRY_DATA), CountryData.class);
+//                        onRegionSelected(item);
+//                        connectToVpn();
+//
+//                    }
+//                });
+
             }
         }
     }
@@ -352,7 +443,7 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
                     showMessage("Error in VPN transport");
                 }
             } else {
-                Log.e(TAG, "Error in VPN Service ");
+                Log.e(TAG, "Error in VPN Service " + e);
             }
         } else if (e instanceof PartnerApiException) {
             switch (((PartnerApiException) e).getContent()) {
@@ -377,41 +468,41 @@ public class MainActivity extends UIActivity implements TrafficListener, VpnStat
     @Override
     public void onBackPressed() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_five_back_enabled).contains("true")) {
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_five_back_enabled).contains("true")) {
             intent = new Intent(this, FifthActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_four_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_four_back_enabled).contains("true")) {
             intent = new Intent(this, FourthActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_three_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_three_back_enabled).contains("true")) {
             intent = new Intent(this, ThirdActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
             intent = new Intent(this, SecondActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
             intent = new Intent(this, FirstActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);

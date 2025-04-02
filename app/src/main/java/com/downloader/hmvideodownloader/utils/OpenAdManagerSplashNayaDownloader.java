@@ -5,12 +5,15 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleObserver;
 
 import com.downloader.hmvideodownloader.screens.SplashActivityNayaDownloader;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnPaidEventListener;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 
 import java.util.Date;
@@ -29,7 +32,7 @@ public class OpenAdManagerSplashNayaDownloader implements LifecycleObserver, App
         this.myApplication = myApplication;
         this.myApplication.registerActivityLifecycleCallbacks(this);
     }
-    public static void fetchAd(Activity activity, AdsManagerNayaDownloader.AdFinished adFinished) {
+    public static void fetchAd(Activity activity, AdsManager.AdFinished adFinished) {
         Log.d("OpenOpen", "show: ");
 
         if (isLoaded){
@@ -41,6 +44,20 @@ public class OpenAdManagerSplashNayaDownloader implements LifecycleObserver, App
                     isLoaded = false;
                     fetchAd(activity);
                     adFinished.onAdFinished();
+                }
+            });
+
+            appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                    AdsManager.logAppOpenAdImpressionOnly(activity, new PrefManagerVideo(activity).getString(SplashActivityNayaDownloader.TAG_OPENAPPID));
+                }
+            });
+            appOpenAd.setOnPaidEventListener(new OnPaidEventListener() {
+                @Override
+                public void onPaidEvent(@NonNull AdValue adValue) {
+                    AdsManager.logAppOpenAdImpression(activity, adValue, appOpenAd);
                 }
             });
         } else {
@@ -72,10 +89,10 @@ public class OpenAdManagerSplashNayaDownloader implements LifecycleObserver, App
 
                 };
         if (SplashActivityNayaDownloader.isConnectedToInternet(activity)
-                && !new PrefManagerVideoNayaDownloader(activity).getString(SplashActivityNayaDownloader.TAG_OPENAPPID).contains("sandeep")) {
+                && !new PrefManagerVideo(activity).getString(SplashActivityNayaDownloader.TAG_OPENAPPID).contains("sandeep")) {
             AdRequest request = getAdRequest();
             AppOpenAd.load(
-                    activity, new PrefManagerVideoNayaDownloader(activity).getString(SplashActivityNayaDownloader.TAG_OPENAPPID), request,
+                    activity, new PrefManagerVideo(activity).getString(SplashActivityNayaDownloader.TAG_OPENAPPID), request,
                     AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
         }
 

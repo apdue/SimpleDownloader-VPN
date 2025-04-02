@@ -3,14 +3,13 @@ package com.downloader.hmvideodownloader.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.downloader.hmvideodownloader.MainActivityNayaDownloader;
 import com.downloader.hmvideodownloader.R;
-import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
-import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.downloader.hmvideodownloader.utils.AdsManager;
+import com.downloader.hmvideodownloader.utils.PrefManagerVideo;
 
 public class ThirdActivityNayaDownloader extends AppCompatActivity {
 
@@ -21,11 +20,11 @@ public class ThirdActivityNayaDownloader extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_three);
 
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.dummy_three_screen).contains("ad")) {
-            AdsManagerNayaDownloader.showAndLoadNativeAd(this, findViewById(R.id.nativeAd), 1);
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.dummy_three_screen).contains("ad")) {
+            AdsManager.showAndLoadNativeAd(this, findViewById(R.id.nativeAd), 1);
         }
 
-        AdsManagerNayaDownloader.showAndLoadNativeAd(this, findViewById(R.id.nativeLayoutSmaller), 0);
+        AdsManager.showAndLoadNativeAd(this, findViewById(R.id.nativeLayoutSmaller), 0);
 
         findViewById(R.id.btnNext).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,14 +36,14 @@ public class ThirdActivityNayaDownloader extends AppCompatActivity {
 
     private void startActivity() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(ThirdActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_four_enabled).contains("true")) {
+        if (new PrefManagerVideo(ThirdActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_four_enabled).contains("true")) {
             intent = new Intent(ThirdActivityNayaDownloader.this, FourthActivityNayaDownloader.class);
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_five_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_five_enabled).contains("true")) {
             intent = new Intent(this, FifthActivityNayaDownloader.class);
         } else {
             intent = new Intent(ThirdActivityNayaDownloader.this, MainActivityNayaDownloader.class);
         }
-        AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+        AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
 
             @Override
             public void onAdFinished() {
@@ -56,17 +55,17 @@ public class ThirdActivityNayaDownloader extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_two_back_enabled).contains("true")) {
             intent = new Intent(this, SecondActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);
                 }
             });
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
             intent = new Intent(this, FirstActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);

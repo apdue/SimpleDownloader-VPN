@@ -23,8 +23,6 @@
                 android:gravity="center"
                 android:minHeight="200dp" />
 
-
-
             <RelativeLayout
                 android:id="@+id/btnNext"
                 android:layout_width="match_parent"
@@ -69,6 +67,24 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/tvPP"
+                android:onClick="ClickPP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privacy_policy"
+                android:fontFamily="@font/worksans"
+                android:textColor="#1C272B"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="10dp"
+                />
+
+
+
+            <include
+                layout="@layout/image_layout"/>
+
 
 
             <TextView
@@ -94,9 +110,6 @@
                 android:gravity="center_horizontal"
                 android:textColor="#1C272B"
                 android:textSize="20sp" />
-
-            <include
-                layout="@layout/image_layout"/>
 
 
         </LinearLayout>

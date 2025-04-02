@@ -18,7 +18,7 @@ public class ClearService extends Service {
 
     public static Context context;
 
-    private static PrefManagerVideoNayaDownloader prf;
+    private static PrefManagerVideo prf;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -30,7 +30,7 @@ public class ClearService extends Service {
 
         context = this;
 
-        prf = new PrefManagerVideoNayaDownloader(context);
+        prf = new PrefManagerVideo(context);
 
         Log.d("ClearService", "Service Started");
         return START_NOT_STICKY;

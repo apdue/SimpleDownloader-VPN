@@ -65,7 +65,7 @@ public class VideosAdapterOnline extends RecyclerView.Adapter<VideosAdapterOnlin
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AdsManagerNayaDownloader.showInterstitialAd(activity, new AdsManagerNayaDownloader.AdFinished() {
+                AdsManager.showInterstitialAd(activity, new AdsManager.AdFinished() {
                     @Override
                     public void onAdFinished() {
                         Intent intent = new Intent(activity, VideoPlayerActivityNayaDownloader.class);
@@ -81,10 +81,10 @@ public class VideosAdapterOnline extends RecyclerView.Adapter<VideosAdapterOnlin
 
     @Override
     public int getItemCount() {
-        if (new PrefManagerVideoNayaDownloader(activity).getInt(SplashActivityNayaDownloader.number_of_videos)>videos.size()){
+        if (new PrefManagerVideo(activity).getInt(SplashActivityNayaDownloader.number_of_videos)>videos.size()){
             return videos.size();
         } else {
-            return new PrefManagerVideoNayaDownloader(activity).getInt(SplashActivityNayaDownloader.number_of_videos);
+            return new PrefManagerVideo(activity).getInt(SplashActivityNayaDownloader.number_of_videos);
         }
     }
     public class ViewHolder extends RecyclerView.ViewHolder {

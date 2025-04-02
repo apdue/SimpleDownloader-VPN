@@ -1,21 +1,40 @@
 {
   "project_info": {
-    "project_number": "114249025160",
-    "project_id": "nexttechhindi-vpn-app",
-    "storage_bucket": "nexttechhindi-vpn-app.firebasestorage.app"
+    "project_number": "380691994607",
+    "project_id": "downloaderdebug",
+    "storage_bucket": "downloaderdebug.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:114249025160:android:ede33ce97c488af262013d",
+        "mobilesdk_app_id": "1:380691994607:android:318ef4b01692a591b1081a",
         "android_client_info": {
-          "package_name": "com.myvpn.onlineappsa"
+          "package_name": "com.apdue.newdownloader"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBJyYFU4Rj84iikiQ-JC_zPaSqQnx5KJW8"
+          "current_key": "AIzaSyC-hUL0FIiBTvHJXdzy5h_A2k9fAJMPr2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380691994607:android:02280339cb3bba5cb1081a",
+        "android_client_info": {
+          "package_name": "com.downloader.hmvideodownloader"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-hUL0FIiBTvHJXdzy5h_A2k9fAJMPr2w"
         }
       ],
       "services": {

@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.downloader.hmvideodownloader.BuildConfig;
 import com.downloader.hmvideodownloader.R;
-import com.downloader.hmvideodownloader.screens.SplashActivityNayaDownloader;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.ArrayList;
@@ -54,12 +53,12 @@ public class MyApplicationNayaDownloader extends Application {
 
     public void initHydraSdk() {
 
-        if (AdsManagerNayaDownloader.id != ""){
+        if (AdsManager.id != ""){
             createNotificationChannel();
             SharedPreferences prefs = getPrefs();
             ClientInfo clientInfo = ClientInfo.newBuilder()
                     .addUrl(prefs.getString(BuildConfig.STORED_HOST_URL_KEY, BuildConfig.BASE_HOST))
-                    .carrierId(prefs.getString(BuildConfig.STORED_CARRIER_ID_KEY, AdsManagerNayaDownloader.id)
+                    .carrierId(prefs.getString(BuildConfig.STORED_CARRIER_ID_KEY, AdsManager.id)
                     ).build();
             List<TransportConfig> transportConfigList = new ArrayList<>();
             transportConfigList.add(HydraTransportConfig.create());

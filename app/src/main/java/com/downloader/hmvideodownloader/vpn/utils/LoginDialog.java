@@ -18,7 +18,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.downloader.hmvideodownloader.BuildConfig;
 import com.downloader.hmvideodownloader.R;
-import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
+import com.downloader.hmvideodownloader.utils.AdsManager;
 import com.downloader.hmvideodownloader.utils.MyApplicationNayaDownloader;
 
 
@@ -70,7 +70,7 @@ public class LoginDialog extends DialogFragment {
         SharedPreferences prefs = ((MyApplicationNayaDownloader) getActivity().getApplication()).getPrefs();
 
         hostUrlEditText.setText(prefs.getString(BuildConfig.STORED_HOST_URL_KEY, BuildConfig.BASE_HOST));
-        carrierIdEditText.setText(prefs.getString(BuildConfig.STORED_CARRIER_ID_KEY, AdsManagerNayaDownloader.id));
+        carrierIdEditText.setText(prefs.getString(BuildConfig.STORED_CARRIER_ID_KEY, AdsManager.id));
 
         hostUrlEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -95,7 +95,7 @@ public class LoginDialog extends DialogFragment {
         String hostUrl = hostUrlEditText.getText().toString();
         if (hostUrl.equals("")) hostUrl = BuildConfig.BASE_HOST;
         String carrierId = carrierIdEditText.getText().toString();
-        if (carrierId.equals("")) carrierId = AdsManagerNayaDownloader.id;
+        if (carrierId.equals("")) carrierId = AdsManager.id;
         loginConfirmationInterface.setLoginParams(hostUrl, carrierId);
         loginConfirmationInterface.loginUser();
         dismiss();

@@ -51,7 +51,7 @@
     <string name="vpn_server_location">VPN Server Location</string>
     <string name="vpn_node">VPN Node</string>
     <string name="legal_information">Legal Information</string>
-    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="terms_of_service">Terms of Service</string>
 
     <string name="logged_in">Logged in</string>

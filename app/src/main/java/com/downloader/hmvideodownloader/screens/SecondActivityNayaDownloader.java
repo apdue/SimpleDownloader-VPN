@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +11,8 @@ import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.downloader.hmvideodownloader.MainActivityNayaDownloader;
 import com.downloader.hmvideodownloader.R;
-import com.downloader.hmvideodownloader.utils.AdsManagerNayaDownloader;
-import com.downloader.hmvideodownloader.utils.PrefManagerVideoNayaDownloader;
+import com.downloader.hmvideodownloader.utils.AdsManager;
+import com.downloader.hmvideodownloader.utils.PrefManagerVideo;
 
 public class SecondActivityNayaDownloader extends AppCompatActivity {
 
@@ -24,14 +23,14 @@ public class SecondActivityNayaDownloader extends AppCompatActivity {
         setContentView(R.layout.activity_screen_two);
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.rlCustomAd);
 
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.dummy_two_screen).contains("ad")) {
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.dummy_two_screen).contains("ad")) {
             rl.setVisibility(View.GONE);
-            AdsManagerNayaDownloader.showAndLoadNativeAd(this, findViewById(R.id.nativeAd), 1);
+            AdsManager.showAndLoadNativeAd(this, findViewById(R.id.nativeAd), 1);
         }else {
             rl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = new PrefManagerVideoNayaDownloader(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.webview_url);
+                    String url = new PrefManagerVideo(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.webview_url);
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                     CustomTabsIntent customTabsIntent = builder.build();
                     customTabsIntent.launchUrl(SecondActivityNayaDownloader.this, Uri.parse(url));
@@ -39,7 +38,7 @@ public class SecondActivityNayaDownloader extends AppCompatActivity {
             });
         }
 
-        AdsManagerNayaDownloader.showAndLoadNativeAd(this, findViewById(R.id.nativeLayoutSmaller), 0);
+        AdsManager.showAndLoadNativeAd(this, findViewById(R.id.nativeLayoutSmaller), 0);
 
         findViewById(R.id.btnNext).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,17 +51,17 @@ public class SecondActivityNayaDownloader extends AppCompatActivity {
 
     private void startActivity() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_three_enabled).contains("true")) {
+        if (new PrefManagerVideo(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_three_enabled).contains("true")) {
             intent = new Intent(SecondActivityNayaDownloader.this, ThirdActivityNayaDownloader.class);
-        } else if (new PrefManagerVideoNayaDownloader(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_four_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(SecondActivityNayaDownloader.this).getString(SplashActivityNayaDownloader.status_dummy_four_enabled).contains("true")) {
             intent = new Intent(SecondActivityNayaDownloader.this, FourthActivityNayaDownloader.class);
-        } else if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_five_enabled).contains("true")) {
+        } else if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_five_enabled).contains("true")) {
             intent = new Intent(this, FifthActivityNayaDownloader.class);
         } else {
             intent = new Intent(SecondActivityNayaDownloader.this, MainActivityNayaDownloader.class);
         }
 
-        AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+        AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
             @Override
             public void onAdFinished() {
                 startActivity(intent);
@@ -73,9 +72,9 @@ public class SecondActivityNayaDownloader extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent;
-        if (new PrefManagerVideoNayaDownloader(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.status_dummy_one_back_enabled).contains("true")) {
             intent = new Intent(this, FirstActivityNayaDownloader.class);
-            AdsManagerNayaDownloader.showInterstitialAd(this, new AdsManagerNayaDownloader.AdFinished() {
+            AdsManager.showInterstitialAd(this, new AdsManager.AdFinished() {
                 @Override
                 public void onAdFinished() {
                     startActivity(intent);

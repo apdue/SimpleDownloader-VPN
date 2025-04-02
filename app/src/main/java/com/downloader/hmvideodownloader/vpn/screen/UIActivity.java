@@ -54,7 +54,7 @@ import unified.vpn.sdk.VpnState;
 
 public abstract class UIActivity extends AppCompatActivity implements View.OnClickListener {
 
-    protected static final String TAG = MainActivity.class.getSimpleName();
+    protected static final String TAG = "TAGVPNMAIN";
 
     private static InterstitialAd mInterstitialAd;
 

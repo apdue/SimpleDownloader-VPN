@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.myvpn.onlineappsa"
+        applicationId = "com.downloader.hmvideodownloader"
         minSdk = 24
         targetSdk = 34
         versionCode = 3
