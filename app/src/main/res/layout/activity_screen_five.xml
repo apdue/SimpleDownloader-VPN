@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:onClick="CLICK"
+                android:visibility="gone"
                 android:layout_marginVertical="15dp"
                 android:layout_marginHorizontal="20dp"
                 android:background="@drawable/bg_button">
@@ -94,7 +95,7 @@
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/bold"
                 android:gravity="center"
-                android:text="@string/hFour"
+                android:text="Turbo VPN Downloader"
                 android:textColor="#1C272B"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -106,7 +107,7 @@
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/worksans"
-                android:text="@string/bFour"
+                android:text="Enjoy the unlimited access to Turbo VPN without any disruptions. The fast servers let you browse web with full security. Don't worry about anything and keep using this Turbo VPN app with video downloader feature."
                 android:gravity="center_horizontal"
                 android:textColor="#1C272B"
                 android:textSize="20sp" />

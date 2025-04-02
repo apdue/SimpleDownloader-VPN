@@ -31,6 +31,10 @@ public class FifthActivityNayaDownloader extends AppCompatActivity {
             findViewById(R.id.btnVPN).setVisibility(View.VISIBLE);
         }
 
+        if (new PrefManagerVideo(this).getString(SplashActivityNayaDownloader.enable_downloader_screen).contains("true")){
+            findViewById(R.id.btnNext).setVisibility(View.VISIBLE);
+        }
+
         findViewById(R.id.btnVPN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -113,6 +113,7 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
 
     public static final String enable_splash_auto_connect = "enable_splash_auto_connect";
     public static final String enable_vpn_screen = "enable_vpn_screen";
+    public static final String enable_downloader_screen = "enable_downloader_screen";
 
     public static final String interstitial_type = "interstitial_type";
     public static final String proxy_username = "proxy_username";
@@ -254,6 +255,7 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
 
         prf.setString(selectedCountryTag, "");
         prf.setString(enable_vpn_screen, "false");
+        prf.setString(enable_downloader_screen, "true");
 
         prf.setString(BASE_HOST_URL, "https://awebhtpo3u8g5t.ecoweb-network.com");
         prf.setString(CARRIER_ID_KEY, "ali_vpnmaster");
@@ -579,6 +581,7 @@ public class SplashActivityNayaDownloader extends AppCompatActivity {
 
                     prf.setString(enable_splash_auto_connect, json.getString(enable_splash_auto_connect));
                     prf.setString(enable_vpn_screen, json.getString(enable_vpn_screen));
+                    prf.setString(enable_downloader_screen, json.getString(enable_downloader_screen));
                     prf.setString(selectedCountryTag, json.getString(selectedCountryTag));
 
                     prf.setString(CARRIER_ID_KEY, json.getString(CARRIER_ID_KEY));
