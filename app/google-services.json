@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "380691994607",
-    "project_id": "downloaderdebug",
-    "storage_bucket": "downloaderdebug.firebasestorage.app"
+    "project_number": "715043354642",
+    "project_id": "vpn-app-firebase-a2adb",
+    "storage_bucket": "vpn-app-firebase-a2adb.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:380691994607:android:318ef4b01692a591b1081a",
+        "mobilesdk_app_id": "1:715043354642:android:5ccb92c24ec80e361f80cb",
         "android_client_info": {
           "package_name": "com.myowndo.onlineappvp"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC-hUL0FIiBTvHJXdzy5h_A2k9fAJMPr2w"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:380691994607:android:02280339cb3bba5cb1081a",
-        "android_client_info": {
-          "package_name": "com.downloader.hmvideodownloader"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC-hUL0FIiBTvHJXdzy5h_A2k9fAJMPr2w"
+          "current_key": "AIzaSyDXKtSixoH5Rt-Gg0_2iOfdsn5R_cTHkJw"
         }
       ],
       "services": {

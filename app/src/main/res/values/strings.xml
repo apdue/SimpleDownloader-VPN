@@ -1,8 +1,9 @@
 <resources>
 
     <string name="app_name">Lite Tapa VPN</string>
-    <string name="facebook_app_id">2542720795933100</string>
-    <string name="facebook_client_token">6d7d17ee349fd9b3f5d435799fa21768</string>
+
+    <string name="facebook_app_id">647594908197769</string>
+    <string name="facebook_client_token">de01305f9325481ca9163cffaf488e6a</string>
 
     <string name="hOne">🚀 Fast &amp; Reliable Downloads</string>
     <string name="bOne">Tired of slow downloads? Our advanced technology ensures you get your favorite videos at blazing-fast speeds without any delays. Whether you\'re saving short clips or full-length movies, our downloader optimizes performance to give you the best experience. Say goodbye to buffering and hello to seamless downloading!</string>

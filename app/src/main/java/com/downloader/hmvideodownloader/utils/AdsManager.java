@@ -385,10 +385,7 @@ public class AdsManager {
 
                 adLoader.loadAd(new AdRequest.Builder().build());
             }
-        } else {
-            container.setVisibility(View.GONE);
         }
-
     }
 
     private static void setupNativeAdView(NativeAd nativeAd, NativeAdView adView, int type) {
